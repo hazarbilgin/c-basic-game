@@ -1,0 +1,64 @@
+#include<iostream>
+#include<stdlib.h>
+
+using namespace std;
+
+class Character
+{
+	private:
+		float health=100;
+		float minDamage;
+		float maxDamage;
+	public:
+		Character(float _minDamage, float _maxDamage)
+		{
+			minDamage = _minDamage;
+			maxDamage = _maxDamage;
+		}
+		
+		float GetHealth()
+		{
+			return health;
+		}
+		
+	
+		 friend float Damage(Character);
+		 friend void TakeDamage(Character&,float);
+		
+};
+
+
+float Damage(Character c)
+{
+		return (c.maxDamage - c.minDamage) * ((((float) rand()) / (float)RAND_MAX)) + c.minDamage;
+}
+
+void TakeDamage(Character &c, float damage)
+{
+	c.health -= damage;
+	if(c.health<0)
+		c.health=0;
+}
+
+int main(void)
+{	
+	char input;
+	Character player(5.0,10.0);
+	Character enemy(5.0,10.0);
+	while(player.GetHealth()>0 && enemy.GetHealth()>0)
+	{
+		cout<<"Player Health: "<<player.GetHealth()<<endl;
+		cout<<"Enemy Health: "<<enemy.GetHealth()<<endl;
+		cin>>input;
+		if(input=='e')
+		{
+			float pdamage = Damage(player);
+			TakeDamage(enemy,pdamage);
+			float edamage = Damage(enemy);
+			TakeDamage(player,edamage);
+		}
+	}
+	cout<<"Player Health: "<<player.GetHealth()<<endl;
+	
+	cout<<"Enemy Health: "<<enemy.GetHealth()<<endl;
+}
